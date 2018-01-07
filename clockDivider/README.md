@@ -18,8 +18,30 @@ This project is based on an external clock (one less thing to manage) which keys
 
 ## Specs
 
+There are four basic modes for the counting.
 
-![Upbeat](https://github.com/robstave/ArduinoComponentSketches/blob/master/miniProProjects/clockDivider/images/upbeatGate1.0.png)
+## Upbeat Gate
+
+The first is to count on the upbeat with a 50% duty cycle (gate mode).  Note that there is some lead in for the
+first part of each clock.
+
+![Upbeat](https://github.com/robstave/miniProProjects/blob/master/clockDivider/images/upbeatGate1.0.png)
+                    
+## Upbeat Trigger
+
+Similar, but the clock just outputs a trigger the size of the main clock
+
+![Upbeat](https://github.com/robstave/miniProProjects/blob/master/clockDivider/images/upbeatTrigger1.0.png)
+
+
+## Downbeat Trigger
+
+In this case, the counting starts on the downbeat. So All clocks fire on the first beat.
+
+
+
+
+## Upbeat Gate
 
 
 ## Similar projects
