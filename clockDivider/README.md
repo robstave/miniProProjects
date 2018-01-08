@@ -4,7 +4,7 @@
 
 Basically, this is a clock counter.  This one relies on an external clock so we are running all the counters on an interrupt.  The clocking is done on either the rising or falling edge of the clock.  The width of the clock cycles can be either 50% or just one main clock cycle (trigger mode).
 
-Inspired by the [4MS clock divider](http://www.4mspedals.com/rcd.php).  In fact, I used to their manual to figure out what the counter really should do (as far as upbeat/downbeat and trigger modes).  Their project does the rotation part as well.  At [95 bucks for the kit](http://www.4mspedals.com/rcd-kit.php), personally, I would just buy that if I was planning a eurorack setup.
+This was inspired by the [4MS clock divider](http://www.4mspedals.com/rcd.php).  In fact, I used to their manual to figure out what the counter really should do (as far as upbeat/downbeat and trigger modes).  Their project does the rotation part as well.  At [95 bucks for the kit](http://www.4mspedals.com/rcd-kit.php), personally, I would just buy that if I was planning a eurorack setup.
 
 I have only played with this up to the breadboard stage.
 
@@ -63,7 +63,7 @@ In this case, the counting starts on the downbeat. So All clocks fire on the fir
 ## Similar projects
 
 * [4MS clock divider](http://www.4mspedals.com/rcd.php) - Most similar
-* [The Count] (https://www.moffenzeefmodular.com/store/count) - Arduino based clock divider with coarse and fine tuning as well as CV controls
+* [The Count] (https://www.moffenzeefmodular.com/store/count) - Arduino based clock divider with coarse and fine tuning as well as CV controls. Little more to buy, but does not need an external clock, and has fun features.
 
 
 

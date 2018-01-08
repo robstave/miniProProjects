@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="3.8in"
-   height="3.5in"
-   viewBox="0 0 96.52 88.9"
+   width="4in"
+   height="3.0999999in"
+   viewBox="0 0 101.6 78.739998"
    version="1.1"
    id="svg3705"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
@@ -32,10 +32,10 @@
      inkscape:current-layer="layer1"
      showgrid="false"
      units="in"
-     inkscape:window-width="1544"
-     inkscape:window-height="991"
-     inkscape:window-x="290"
-     inkscape:window-y="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata3702">
@@ -45,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,7 +53,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-208.09998)">
+     transform="translate(0,-218.25998)">
     <g
        id="g4530"
        transform="translate(6.0382227,19.579167)">
@@ -990,11 +990,6 @@
          x="86.192902"
          y="276.59741"
          style="font-size:1.41111112px;stroke-width:0.26458332">14</tspan></text>
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 13.822613,289.9534 38.925249,7e-5 v -4.16186 l 36.144875,6e-5 2.93684,0.0197 v 0"
-       id="path5684"
-       inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -1118,5 +1113,10 @@
          x="18.526001"
          y="212.98909"
          style="font-size:3.52777767px;stroke-width:0.26458332">Divide by N Upbeat 50% duty cycle</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 13.480535,290.22798 38.925249,7e-5 v -4.16186 l 22.243,4e-5 v 4.16186 l 16.682249,3e-5"
+       id="path8461"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
