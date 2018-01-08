@@ -34,14 +34,20 @@ Similar, but the clock just outputs a trigger the size of the main clock
 ![Upbeat](https://github.com/robstave/miniProProjects/blob/master/clockDivider/images/upbeatTrigger1.0.png)
 
 
-## Downbeat Trigger
+## Upbeat Gate
 
 In this case, the counting starts on the downbeat. So All clocks fire on the first beat.
 
+![Upbeat](https://github.com/robstave/miniProProjects/blob/master/clockDivider/images/downbeatGate1.0.png)
+
+## Downbeat Trigger
 
 
 
-## Upbeat Gate
+![Upbeat](https://github.com/robstave/miniProProjects/blob/master/clockDivider/images/downbeatTrigger1.0.png)
+
+
+
 
 
 ## Similar projects
