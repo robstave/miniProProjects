@@ -28,6 +28,7 @@
        Simple counts
        Reset
        Up and down beats
+       Gate/Trigger mode
 
 
    Note: This sketch has been written specifically for pro mini.
@@ -39,6 +40,11 @@
 
 const int int0 = 0;  // interrupt 0 - Clock interrupt
 const int int1 = 1;  // interrupt 1 - Reset interrupt
+
+#define BIT_OFF(port,pin) port &= ~(1<<(pin))
+#define BIT_ON(port,pin) port |= (1<<(pin))
+#define BIT_FLIP(port,pin) port ^= (_BV(pin))
+
 
 const byte DIV1PIN = PD4;
 const byte DIV2PIN = PD5;
@@ -83,7 +89,12 @@ void setup()
   attachInterrupt(int1, resetCounts, RISING);
 }
 
-void clockCounter()      // called by interrupt
+/**
+   Clock Interrupt
+   Increment counters and divide based on one of
+   four strategies.
+*/
+void clockCounter()
 {
   incrementCounts();
 
@@ -103,7 +114,9 @@ void clockCounter()      // called by interrupt
 }
 
 
-//Clear counts array and ports
+/**
+   Clear all counts/ports
+*/
 void resetCounts () {
 
   memset_volatile(counts, 0, sizeof(counts));
@@ -113,74 +126,87 @@ void resetCounts () {
 }
 
 /**
-   Divide count by up beat
+    Divide count by up beat.
+    State machine is a little weird because of those lead in zeros
+
+    1010101010101010101010
+    0000111000111000111000  div3
+    0000000011111000001111  div5
+
 */
 void divUpBeat() {
 
   //Always flip the first bit
-
-  PORTD ^= (_BV(DIV1PIN));
+  BIT_FLIP(PORTD, DIV1PIN);
 
   if (counts[0] > 1) {
     //Use 2 here to track on/off
     counts[0] = 0;
   }
 
+  //div by 2
   if (counts[1] >= 3) {
     counts[1] = 1;
-    PORTD ^= (_BV(DIV2PIN));
+    BIT_FLIP(PORTD, DIV2PIN);
   }
 
   //div by 3
   if (counts[2] >= 5) {
     counts[2] = 2;
-    PORTD ^= (_BV(DIV3PIN));
+    BIT_FLIP(PORTD, DIV3PIN);
   }
 
   //div by 4
   if (counts[3] >= 7) {
     counts[3] = 3;
-    PORTD ^= (_BV(DIV4PIN));
+    BIT_FLIP(PORTD, DIV4PIN);
   }
 
   //div by 5
   if (counts[4] >= 9) {
     counts[4] = 4;
-    PORTB ^= (_BV(DIV5PIN));
+    BIT_FLIP(PORTB, DIV5PIN);
   }
 
   //div by 6
   if (counts[5] >= 11) {
     counts[5] = 5;
-    PORTB ^= (_BV(DIV6PIN));
+    BIT_FLIP(PORTB, DIV6PIN);
   }
 
   //div by 7
   if (counts[6] >= 13) {
     counts[6] = 6;
-    PORTB ^= (_BV(DIV7PIN));
+    BIT_FLIP(PORTB, DIV7PIN);
   }
 
   //div by 8
   if (counts[7] >= 15) {
     counts[7] = 7;
-    PORTB ^= (_BV(DIV8PIN));
+    BIT_FLIP(PORTB, DIV8PIN);
   }
 }
 
+/**
+   Similar to the up beat, but the length of the counter is just
+   a trigger the size of the clock
 
+   Example:
+   101010101010101010
+   000010000010000010  div by 3
+*/
 void divUpBeatTrigger() {
+
   PORTD ^= (_BV(DIV1PIN));
   if (counts[0] >= 2) {
-    //Use 2 here to track on/off
     counts[0] = 0;
   }
 
-  //div by 3
+  //div by 2
   if (counts[1] == 3) {
-    PORTD |= _BV(DIV2PIN);
+    BIT_ON(PORTD, DIV2PIN);
   } else {
-    PORTD &= ~_BV(DIV2PIN);
+    BIT_OFF(PORTD, DIV2PIN);
   }
   if ( counts[1] >= 4) {
     counts[1] = 0;
@@ -188,20 +214,19 @@ void divUpBeatTrigger() {
 
   //div by 3
   if (counts[2] == 5) {
-    PORTD |= _BV(DIV3PIN);
+    BIT_ON(PORTD, DIV3PIN);
   } else {
-    PORTD &= ~_BV(DIV3PIN);
+    BIT_OFF(PORTD, DIV3PIN);
   }
   if ( counts[2] >= 6) {
     counts[2] = 0;
   }
 
-
   //div by 4
   if (counts[3] == 7) {
-    PORTD ^= (_BV(DIV4PIN));
+    BIT_ON(PORTD, DIV4PIN);
   } else {
-    PORTD &= ~_BV(DIV4PIN);
+    BIT_OFF(PORTD, DIV4PIN);
   }
   if ( counts[3] >= 8) {
     counts[3] = 0;
@@ -209,9 +234,9 @@ void divUpBeatTrigger() {
 
   //div by 5
   if (counts[4] == 9) {
-    PORTB |= (_BV(DIV5PIN));
+    BIT_ON(PORTB, DIV5PIN);
   } else {
-    PORTB &= ~_BV(DIV5PIN);
+    BIT_OFF(PORTB, DIV5PIN);
   }
   if ( counts[4] >= 10) {
     counts[4] = 0;
@@ -219,9 +244,9 @@ void divUpBeatTrigger() {
 
   //div by 6
   if (counts[5] == 11) {
-    PORTB |= (_BV(DIV6PIN));
+    BIT_ON(PORTB, DIV6PIN);
   } else {
-    PORTB &= ~_BV(DIV6PIN);
+    BIT_OFF(PORTB, DIV6PIN);
   }
   if ( counts[5] >= 12) {
     counts[5] = 0;
@@ -229,9 +254,9 @@ void divUpBeatTrigger() {
 
   //div by 7
   if (counts[6] == 13) {
-    PORTB |= (_BV(DIV7PIN));
+    BIT_ON(PORTB, DIV7PIN);
   } else {
-    PORTB &= ~_BV(DIV7PIN);
+    BIT_OFF(PORTB, DIV7PIN);
   }
   if ( counts[6] >= 13) {
     counts[6] = 0;
@@ -239,9 +264,9 @@ void divUpBeatTrigger() {
 
   //div by 8
   if (counts[7] == 15) {
-    PORTB |= (_BV(DIV8PIN));
+    BIT_ON(PORTB, DIV8PIN);
   } else {
-    PORTB &= ~_BV(DIV8PIN);
+    BIT_OFF(PORTB, DIV8PIN);
   }
   if ( counts[7] >= 18) {
     counts[7] = 0;
@@ -250,24 +275,28 @@ void divUpBeatTrigger() {
 }
 
 /**
-*  Divide count by down beat
+   Divide count by down beat
+
+   Example
+   101010101010
+   110011001100
+   111000111000
+   111100001111
 */
 void divDownBeat() {
-  //Always flip the first bit
 
-  PORTD ^= (_BV(DIV1PIN));
+  //Always flip the first bit
+  BIT_FLIP(PORTD, DIV1PIN);
 
   if (counts[0] > 1) {
-    //Use 2 here to track on/off
     counts[0] = 0;
   }
 
   // div by 2
   if (counts[1] < 3) {
-    PORTD |= (_BV(DIV2PIN));
-
+    BIT_ON(PORTD, DIV2PIN);
   } else {
-    PORTD &= ~_BV(DIV2PIN);
+    BIT_OFF(PORTD, DIV2PIN);
     if (counts[1] >= 4) {
       counts[1] = 0;
     }
@@ -275,9 +304,9 @@ void divDownBeat() {
 
   //div by 3
   if (counts[2] < 4) {
-    PORTD |= (_BV(DIV3PIN));
+    BIT_ON(PORTD, DIV3PIN);
   } else {
-    PORTD &= ~_BV(DIV3PIN);
+    BIT_OFF(PORTD, DIV3PIN);
     if (counts[2] >= 6 ) {
       counts[2] = 0;
     }
@@ -285,9 +314,9 @@ void divDownBeat() {
 
   //div by 4
   if (counts[3] < 5) {
-    PORTD |= (_BV(DIV4PIN));
+    BIT_ON(PORTD, DIV4PIN);
   } else {
-    PORTD &= ~_BV(DIV4PIN);
+    BIT_OFF(PORTD, DIV4PIN);
     if (counts[3] >= 8 ) {
       counts[3] = 0;
     }
@@ -295,20 +324,19 @@ void divDownBeat() {
 
   //div by 5
   if (counts[4] < 6) {
-    PORTB |= (_BV(DIV5PIN));
+    BIT_ON(PORTB, DIV5PIN);
   } else {
-    PORTB &= ~_BV(DIV5PIN);
+    BIT_OFF(PORTB, DIV5PIN);
     if (counts[4] >= 10 ) {
       counts[4] = 0;
     }
   }
 
-
   //div by 6
   if (counts[5] < 7) {
-    PORTB |= (_BV(DIV6PIN));
+    BIT_ON(PORTB, DIV6PIN);
   } else {
-    PORTB &= ~_BV(DIV6PIN);
+    BIT_OFF(PORTB, DIV6PIN);
     if (counts[5] >= 12 ) {
       counts[5] = 0;
     }
@@ -316,9 +344,9 @@ void divDownBeat() {
 
   //div by 7
   if (counts[6] < 8) {
-    PORTB |= (_BV(DIV7PIN));
+    BIT_ON(PORTB, DIV7PIN);
   } else {
-    PORTB &= ~_BV(DIV7PIN);
+    BIT_OFF(PORTB, DIV7PIN);
     if (counts[6] >= 14 ) {
       counts[6] = 0;
     }
@@ -326,11 +354,12 @@ void divDownBeat() {
 
   //div by 8
   if (counts[7] < 9) {
-    PORTB |= (_BV(DIV8PIN));
+    BIT_ON(PORTB, DIV8PIN);
   } else {
-    PORTB &= ~_BV(DIV8PIN);
+    BIT_OFF(PORTB, DIV8PIN);
     if (counts[5] >= 16 ) {
-      counts[5] = 0;
+      counts[5]  = 0;
+
     }
   }
 }
@@ -339,15 +368,15 @@ void divDownBeat() {
    Similar to divDownBeat, but the size of the
    step is just one count
 
-   x0x0x0x0x0x0
-   xx00xx00xx00
-   xx0000xx0000
+   101010101010
+   100010001000
+   100000100000
 */
 void divDownBeatTrigger() {
 
   //Always flip the first bit
+  BIT_FLIP(PORTD, DIV1PIN);
 
-  PORTD ^= (_BV(DIV1PIN));
 
   if (counts[0] > 1) {
     //Use 2 here to track on/off
@@ -356,9 +385,9 @@ void divDownBeatTrigger() {
 
   // div by 2
   if (counts[1] < 2) {
-    PORTD |= (_BV(DIV2PIN));
+    BIT_ON(PORTD, DIV2PIN);
   } else {
-    PORTD &= ~_BV(DIV2PIN);
+    BIT_OFF(PORTD, DIV2PIN);
     if (counts[1] >= 4) {
       counts[1] = 0;
     }
@@ -366,9 +395,9 @@ void divDownBeatTrigger() {
 
   //div by 3
   if (counts[2] < 2) {
-    PORTD |= (_BV(DIV3PIN));
+    BIT_ON(PORTD, DIV3PIN);
   } else {
-    PORTD &= ~_BV(DIV3PIN);
+    BIT_OFF(PORTD, DIV3PIN);
     if (counts[2] >= 6 ) {
       counts[2] = 0;
     }
@@ -376,9 +405,9 @@ void divDownBeatTrigger() {
 
   //div by 4
   if (counts[3] < 2) {
-    PORTD |= (_BV(DIV4PIN));
+    BIT_ON(PORTD, DIV4PIN);
   } else {
-    PORTD &= ~_BV(DIV4PIN);
+    BIT_OFF(PORTD, DIV4PIN);
     if (counts[3] >= 8 ) {
       counts[3] = 0;
     }
@@ -386,20 +415,19 @@ void divDownBeatTrigger() {
 
   //div by 5
   if (counts[4] < 2) {
-    PORTB |= (_BV(DIV5PIN));
+    BIT_ON(PORTB, DIV5PIN);
   } else {
-    PORTB &= ~_BV(DIV5PIN);
+    BIT_OFF(PORTB, DIV5PIN);
     if (counts[4] >= 10 ) {
       counts[4] = 0;
     }
   }
 
-
   //div by 6
   if (counts[5] < 2) {
-    PORTB |= (_BV(DIV6PIN));
+    BIT_ON(PORTB, DIV6PIN);
   } else {
-    PORTB &= ~_BV(DIV6PIN);
+    BIT_OFF(PORTB, DIV6PIN);
     if (counts[5] >= 12 ) {
       counts[5] = 0;
     }
@@ -407,9 +435,9 @@ void divDownBeatTrigger() {
 
   //div by 7
   if (counts[6] < 2) {
-    PORTB |= (_BV(DIV7PIN));
+    BIT_ON(PORTB, DIV7PIN);
   } else {
-    PORTB &= ~_BV(DIV7PIN);
+    BIT_OFF(PORTB, DIV7PIN);
     if (counts[6] >= 14 ) {
       counts[6] = 0;
     }
@@ -417,9 +445,9 @@ void divDownBeatTrigger() {
 
   //div by 8
   if (counts[7] < 2) {
-    PORTB |= (_BV(DIV8PIN));
+    BIT_ON(PORTB, DIV8PIN);
   } else {
-    PORTB &= ~_BV(DIV8PIN);
+    BIT_OFF(PORTB, DIV8PIN);
     if (counts[5] >= 16 ) {
       counts[5] = 0;
     }
